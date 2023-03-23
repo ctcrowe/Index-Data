@@ -110,8 +110,8 @@ def create_datasets(input_file):
     test_words = [inputs[i] for i in rp[-test_set_size:]]
     print(f"split up the dataset into {len(train_words)} training examples and {len(test_words)} test examples")
 
-    train_dataset = OccupancyDataset(train_words)
-    test_dataset = OccupancyDataset(test_words)
+    train_dataset = IndexDataset(train_words)
+    test_dataset = IndexDataset(test_words)
     return train_dataset, test_dataset
 
 class InfiniteDataLoader:
@@ -247,8 +247,8 @@ class XfmrModel(nn.Module):
 
         return logits, loss
 
-txt_path = "OccupancyNetworkData.txt"
-path = "/workspaces/OccupancyNet/OccupancyNetwork.pt"
+txt_path = "IndexNetworkData.txt"
+path = "IndexNetwork.pt"
 model = XfmrModel()
 if os.path.isfile(path):
     statedict = torch.load(path)
