@@ -5,3 +5,96 @@ Floor Plan - First Floor,0,2 - Building Plans
 Level 1,0,2 - Building Plans
 Roof Level,0,2 - Building Plans
 North Elevation,0,3 - Building Elevations
+Exterior Wall Types,1,6 - Partition Types Legends and Schedules
+Wall Type A.1,0,6 - Partition Types Legends and Schedules
+Partition Type A.1,0,6 - Partition Types Legends and Schedules
+Floor Plan - First Floor,0,2 - Building Plans
+Level 1,0,2 - Building Plans
+Roof Level,0,2 - Building Plans
+North Elevation,0,3 - Building Elevations
+Exterior Wall Types,1,6 - Partition Types Legends and Schedules
+Wall Type A.1,0,6 - Partition Types Legends and Schedules
+Partition Type A.1,0,6 - Partition Types Legends and Schedules
+Floor Plan - First Floor,0,2 - Building Plans
+Level 1,0,2 - Building Plans
+Roof Level,0,2 - Building Plans
+North Elevation,0,3 - Building Elevations
+SITE PLAN,1,1 - Site Information
+SITE PLAN,0,1 - Site Information
+BASEMENT - NORTH,0,2 - Building Plans
+BASEMENT PLAN - NORTH,1,2 - Building Plans
+BASEMENT - SOUTH,0,2 - Building Plans
+BASEMENT PLAN - SOUTH,1,2 - Building Plans
+BASEMENT SLAB PLAN - NORTH,0,2 - Building Plans
+BASEMENT SLAB PLAN - NORTH,1,2 - Building Plans
+BASEMENT SLAB PLAN - SOUTH,0,2 - Building Plans
+BASEMENT SLAB PLAN - SOUTH,1,2 - Building Plans
+WEST ELEVATION,0,3 - Building Elevations
+NORTH ELEVATION,0,3 - Building Elevations
+ELEVATIONS,1,3 - Building Elevations
+EAST ELEVATION PART 2,0,3 - Building Elevations
+EAST ELEVATION PART 1,0,3 - Building Elevations
+COURTYARD ELEVATION A,0,3 - Building Elevations
+COURTYARD ELEVATION B,0,3 - Building Elevations
+SOUTH ELEVATION,0,3 - Building Elevations
+WEST COURTYARD ELEVATION PART 2,0,3 - Building Elevations
+WEST COURTYARD ELEVATION PART 1,0,3 - Building Elevations
+ENTRANCE PORTAL ELEVATION,0,3 - Building Elevations
+COURTYARD ELEVATION D,0,3 - Building Elevations
+BUILDING SECTION 01,0,3 - Building Elevations
+BUILDING SECTIONS,1,3 - Building Elevations
+BUILDING SECTION 02,0,3 - Building Elevations
+UNIT ST.C.1,0,4 - Enlarged Views
+UNIT ST.A.2,0,4 - Enlarged Views
+UNIT ST.A.1,0,4 - Enlarged Views
+WOOD FRAMED UNIT PLANS,1,4 - Enlarged Views
+UNIT 1B.A.5,0,4 - Enlarged Views
+ENLARGED STAIR PLANS / SECTIONS,1,7 - Vertical Circulation
+STAIR 01 SECTION A,0,7 - Vertical Circulation
+STAIR 01 SECTION B,0,7 - Vertical Circulation
+STAIR 01 PLAN - L04,0,7 - Vertical Circulation
+STAIR 01 PLAN - BASEMENT,0,7 - Vertical Circulation
+STIAR 01 PLAN - L01,0,7 - Vertical Circulation
+STAIR 01 PLAN L01,0,7 - Vertical Circulation
+STAIR 01 PLAN - ROOF,0,7 - Vertical Circulation
+STAIR 04 GUARDRAIL DETAIL,0,7 - Vertical Circulation
+STAIR 04 LANDING AT CONCRETE FLOOR,0,7 - Vertical Circulation
+STAIR DETAILS,1,7 - Vertical Circulation
+ENLARGED ELEVATOR PLANS / SECTION,1,7 - Vertical Circulation
+ELEVATOR 1 & 2 PLAN,0,7 - Vertical Circulation
+ELEVATOR 1 & 2 PLAN - L01,0,7 - Vertical Circulation
+ELEVATOR 1 CROSS SECTION,0,7 - Vertical Circulation
+ELEVATOR 1 & 2 LONGITUDINAL SECTION,0,7 - Vertical Circulation
+6TH ST LOBBY & LOUNGE & MAILROOM FLOOR PLAN,0,4 - Enlarged Views
+FITNESS CENTER FLOOR PLAN,0,4 - Enlarged Views
+UNIT 3B.PH.A.1,0,4 - Enlarged Views
+2ND FLOOR RCP - NORTH,2 - BUILDING PLANS
+1ST FLOOR PLAN,1,2 - BUILDING PLANS
+TYPE IA - FLOOR CEILING ASSEMBLY AT GARAGE,0,6 - Partition Types Legends and Schedules
+FLOOR / CEILING ASSEMBLIES,1,6 - Partition Types Legends and Schedules
+DOOR SCHEDULE,1,6 - Partition Types Legends and Schedules
+UNIT SLIDING BARN DOOR JAMB,0,9 - Interior Details
+HM DOOR THRESHOLD @ ROOF,0,8 - Exterior Details
+ELEVATOR SILL/ HEAD @ SMOKE CONTAINMENT SYSTEM,0,7 - Vertical Circulation
+BASE CABINET W/ 2 SLIDING DRAWERS,0,9 - Interior Details
+LAUNDRY CABINET,0,9 - Interior Details
+TYP. GYP. BOARD CEILING / BULKHEAD,0,9 - Interior Details
+FIRE PROTECTION AT STRUCTURAL STEEL BEAM,0,9 - Interior Details
+TRASH CHUTE VENT ROOF PENETRATION,0,8 - Exterior Details
+OCCUPIED ROOF TO WALL @ EIFS,0,8 - Exterior Details
+WINDOW DETAIL @ SMALL FRAME BUILT-OUT,0,8 - Exterior Details
+WINDOW DETAIL @ LARGE FRAME BUILT-OUT,0,8 - Exterior Details
+PORTAL DECK DETAILS,1,8 - Exterior Details
+Typical Wind Screen Elevation Detail,0,8 - Exterior Details
+Typical Wind Screen Detail,0,8 - Exterior Details
+Section Detail @ Level 2 Portal At Wall,0,8 - Exterior Details
+PORTAL DECK / FRAME DETAILS,1,8 - Exterior Details
+PORTAL DETAIL - PLANTER @ CORRIDOR,0,8 - Exterior Details
+PORTAL DETAIL @ T.O. RAMP T OPAVER DECK,0,8 - Exterior Details
+PORTAL DETAIL @ SIDE OF RAMP,0,8 - Exterior Details
+SECTION DETAIL AT COLUMN BASE @ CURB,0,8 - Exterior Details
+GUARDRAIL @ CORRIDOR EDGE - TOP OF SLOPE,0,8 - Exterior Details
+GUARDRAIL PLAN DETAIL @ KNIFE PLATE,0,8 - Exterior Details
+GUARDRAIL ELEVATION DETAIL,0,8 - EXTERIOR DETAILS
+BALCONY DETAIL @ WALL,0,8 - Exterior Details
+BALCONY & EXTERIOR CORRIDOR DETAILS,1,8 - Exterior Details

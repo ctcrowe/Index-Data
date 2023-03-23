@@ -24,9 +24,9 @@ dropout = 0.2
 
 chars = [' ', ',', '_', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
         'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-class_map = {"0 - General" : 0, "1 - Site Information" : 1, "2 - Building Plans" : 2, "3 - Building Elevations" : 3, "4 - Enlarged Views": 4,
-             "5 - Wall Sections and Elevations" : 5, "6 - Partition Types Legends and Schedules" : 6, "7 - Vertical Circulation" : 7,
-             "8 - Exterior Details" : 8, "9 - Interior Details" : 9,  "D - Demolition" : 10}
+class_map = {"0 - GENERAL" : 0, "1 - SITE INFORMATION" : 1, "2 - BUILDING PLANS" : 2, "3 - BUILDING ELEVATIONS" : 3, "4 - ENLARGED VIEWS": 4,
+             "5 - WALL SECTIONS AND ELEVATIONS" : 5, "6 - PARTITION TYPES LEGENDS AND SCHEDULES" : 6, "7 - VERTICAL CIRCULATION" : 7,
+             "8 - EXTERIOR DETAILS" : 8, "9 - INTERIOR DETAILS" : 9,  "D - DEMOLITION" : 10}
 
 # data loading
 def get_batch(split):
@@ -67,13 +67,13 @@ def get_Sample(input, printSample=False):
     try :
         types[0] = (float)(lines[1])
     except: types[0] = 0
-       
+    
     try :
         classification = lines[-1]
         classification = class_map[classification]
     except :
         classification = 0
-    
+
     if printSample :
         print(input, sample, classification)
     return torch.tensor(sample), torch.tensor(types, dtype = torch.float), torch.tensor(classification)
@@ -222,15 +222,15 @@ class XfmrModel(nn.Module):
         elif isinstance(module, nn.Embedding):
             torch.nn.init.normal_(module.weight, mean=0.0, std=0.02)
     
-    def forward(self, A, B, C, targets = None):
+    def forward(self, A, B, targets = None):
         Batch, T = A.shape
         tok_emb = self.token_embedding_table(A)
         pos_emb = self.position_embedding_table(torch.arange(T, device = device))
-        type_emb = self.type_head(C)
+        type_emb = self.type_head(B)
         type_x = type_emb.unsqueeze(1).repeat(1, block_size, 1)
         x = tok_emb + pos_emb
         x = self.first_block(x)
-        x = x + area_x + type_x
+        x = x + type_x
         x = self.blocks(x)
         x = self.ln_f(x)
         x = self.lm_head(x)
