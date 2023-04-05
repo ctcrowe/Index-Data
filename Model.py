@@ -58,14 +58,20 @@ def get_Sample(input, printSample=False):
     lines = input.split(',')
     line = lines[0]
     sample = [0] * block_size
+    size = [0]
     types = [0]
     for i in range(len(line)):
         try :
             sample[i] = chars.index(line[i])
         except :
             pass
+
     try :
-        types[0] = (float)(lines[1])
+        size[0] = (float)(lines[1])
+    except: size[0] = 48
+    
+    try :
+        types[0] = (float)(lines[2])
     except: types[0] = 0
     
     try :
@@ -76,7 +82,7 @@ def get_Sample(input, printSample=False):
 
     if printSample :
         print(input, sample, classification)
-    return torch.tensor(sample), torch.tensor(types, dtype = torch.float), torch.tensor(classification)
+    return torch.tensor(sample), torch.tensor(size, dtype = torch.float), torch.tensor(types, dtype = torch.float), torch.tensor(classification)
 
 class IndexDataset(Dataset):
     def __init__(self, lines):
@@ -88,16 +94,16 @@ class IndexDataset(Dataset):
         #with open('OLFNetworkData.txt', 'r', encoding='utf-8') as f:
             #text = f.read()
         for line in lines: # text.splitlines():
-            name, view_type, sample = get_Sample(line)
-            self.data.append([name, view_type, sample])
+            name, view_size, view_type, sample = get_Sample(line)
+            self.data.append([name, view_size, view_type, sample])
         self.stoi = {ch:i+1 for i,ch in enumerate(chars)}
     
     def __len__(self):
         return len(self.data)
     
     def __getitem__(self, idx):
-        name, view_type, sample = self.data[idx]
-        return name, view_type, sample
+        name, view_size, view_type, sample = self.data[idx]
+        return name, view_size, view_type, sample
     
 def create_datasets(input_file):
     with open(input_file, 'r') as f:
@@ -134,8 +140,8 @@ def evaluate(model, dataset, max_batches=None):
     losses = []
     for i, batch in enumerate(loader):
         batch = [t.to(device) for t in batch]
-        A, B, C = batch
-        logits, loss = model(A, B, C)
+        A, B, C, D = batch
+        logits, loss = model(A, B, C, D)
         losses.append(loss.item())
         if max_batches is not None and i >= max_batches:
             break
@@ -209,6 +215,7 @@ class XfmrModel(nn.Module):
         super().__init__()
         self.token_embedding_table = nn.Embedding(len(chars), n_embd)
         self.position_embedding_table = nn.Embedding(block_size, n_embd)
+        self.size_head = nn.Linear(1, n_embd, dtype = torch.float)
         self.type_head = nn.Linear(1, n_embd, dtype = torch.float)
         self.first_block = Block(n_embd, n_head=n_head)
         self.blocks = nn.Sequential(*[Block(n_embd, n_head = n_head) for _ in range(n_layer - 1)])
@@ -224,15 +231,17 @@ class XfmrModel(nn.Module):
         elif isinstance(module, nn.Embedding):
             torch.nn.init.normal_(module.weight, mean=0.0, std=0.02)
     
-    def forward(self, A, B, targets = None):
+    def forward(self, A, B, C, targets = None):
         Batch, T = A.shape
         tok_emb = self.token_embedding_table(A)
         pos_emb = self.position_embedding_table(torch.arange(T, device = device))
-        type_emb = self.type_head(B)
+        size_emb = self.size_head(B)
+        size_x = size_emb.unsqueeze(1).repeat(1, block_size, 1)
+        type_emb = self.type_head(C)
         type_x = type_emb.unsqueeze(1).repeat(1, block_size, 1)
         x = tok_emb + pos_emb
         x = self.first_block(x)
-        x = x + type_x
+        x = x + type_x + size_x
         x = self.blocks(x)
         x = self.ln_f(x)
         x = self.lm_head(x)
@@ -272,9 +281,9 @@ def RunTraining():
         t0 = time.time()
         batch = batch_loader.next()
         batch = [t.to(device) for t in batch]
-        A, B, C = batch
+        A, B, C, D = batch
 
-        logits, loss = model(A, B, C)
+        logits, loss = model(A, B, C, D)
 
         model.zero_grad(set_to_none = True)
         loss.backward()
@@ -310,9 +319,10 @@ while True:
         while test != "X":
             text = input("Test your room name")
             sample = get_Sample(text, True)
-            A, B, C = sample
+            A, B, C, D = sample
             A = A.view(1, -1)
             B = B.view(1, -1)
+            C = C.view(1, -1)
             print(A, B)
             logits, loss = model(A, B, C)
             print(logits)
