@@ -100,3 +100,13 @@ BALCONY DETAIL @ WALL,0,8 - Exterior Details
 BALCONY & EXTERIOR CORRIDOR DETAILS,1,8 - Exterior Details
 Window Jamb at Exterior Stucco,0,8 - EXTERIOR DETAILS
 Exterior Soffit,0,8 - EXTERIOR DETAILS
+Wall Section at Exterior Rain Screen,0,5 - WALL SECTIONS AND ELEVATIONS
+Overall Floor Plan,0,2 - BUILDING PLANS
+Enlarged Restroom Plan,0,4 - ENLARGED VIEWS
+Elevator Section,0,7 - VERTICAL CIRCULATION
+Unit 403.B Plan,0,4 - ENLARGED VIEWS
+Wall Section at Building Entry,0,5 - WALL SECTIONS AND ELEVATIONS
+Wall Elevation at Building Entry,0,5 - WALL SECTIONS AND ELEVATIONS
+Building Entry Soffit Details,0,8 - EXTERIOR DETAILS
+Waffle Slab Connection at Light Fixture,0,9 - INTERIOR DETAILS
+Overall Demolition Plan,0,D - DEMOLITION
