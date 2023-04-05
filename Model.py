@@ -33,7 +33,7 @@ def get_batch(split):
     # generate a small batch of data of inputs x and targets y
     data = train_data if split == 'train' else val_data
     data_out = train_outputs if split == 'train' else val_outputs
-    ix = torch.randint(len(data) - block_size, (batch_size,))
+    ix = torch.randint(len(data), (batch_size,))
     x = torch.stack([data[i] for i in ix])
     y = torch.stack([data_out[i] for i in ix])
     x, y = x.to(device), y.to(device)
