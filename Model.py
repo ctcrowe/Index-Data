@@ -16,7 +16,7 @@ learning_rate = 3e-4
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 eval_iters = 200
 n_embd = 128
-n_head = 4
+n_head = 6
 n_layer = 4
 dropout = 0.2
 # ------------
