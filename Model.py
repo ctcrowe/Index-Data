@@ -17,7 +17,7 @@ device = 'cuda' if torch.cuda.is_available() else 'cpu'
 eval_iters = 200
 n_embd = 128
 n_head = 6
-n_layer = 4
+n_layer = 3
 dropout = 0.2
 # ------------
 
@@ -149,7 +149,7 @@ def evaluate(model, dataset, max_batches=None):
     model.train()
     return mean_loss
 
-class Head(nn.Module):
+class TimedHead(nn.Module):
     def __init__(self, head_size):
         super().__init__()
         self.key = nn.Linear(n_embd, head_size, bias = False)
@@ -165,6 +165,39 @@ class Head(nn.Module):
 
         wei = q @ k.transpose(-2, -1) * k.shape[-1]**-0.5
         wei = wei.masked_fill(self.tril[:T, :T] == 0, float('-inf'))
+        wei = F.softmax(wei, dim=-1)
+        wei = self.dropout(wei)
+        v = self.value(x)
+        out = wei @ v
+        return out
+
+class TimedMultiHeadAttention(nn.Module):
+    def __init__(self, num_heads, head_size):
+        super().__init__()
+        self.heads = nn.ModuleList([TimedHead(head_size) for _ in range(num_heads)])
+        self.proj = nn.Linear(head_size * num_heads, n_embd)
+        self.dropout = nn.Dropout(dropout)
+
+    def forward(self, x):
+        out = torch.cat([h(x) for h in self.heads], dim=-1)
+        out = self.dropout(self.proj(out))
+        return out
+
+
+class Head(nn.Module):
+    def __init__(self, head_size):
+        super().__init__()
+        self.key = nn.Linear(n_embd, head_size, bias = False)
+        self.query = nn.Linear(n_embd, head_size, bias = False)
+        self.value = nn.Linear(n_embd, head_size, bias = False)
+        self.dropout = nn.Dropout(dropout)
+
+    def forward(self, x):
+        B,C = x.shape
+        k = self.key(x)
+        q = self.query(x)
+
+        wei = q @ k.transpose(-2, -1) * k.shape[-1]**-0.5
         wei = F.softmax(wei, dim=-1)
         wei = self.dropout(wei)
         v = self.value(x)
@@ -210,6 +243,20 @@ class Block(nn.Module):
         x = x + self.ffwd(self.ln2(x))
         return x
 
+class TimedBlock(nn.Module):
+    def __init__(self, n_embd, n_head):
+        super().__init__()
+        head_size = n_embd // n_head
+        self.sa = TimedMultiHeadAttention(n_head, head_size)
+        self.ffwd = FeedForward(n_embd)
+        self.ln1 = nn.LayerNorm(n_embd)
+        self.ln2 = nn.LayerNorm(n_embd)
+
+    def forward(self, x):
+        x = x + self.sa(self.ln1(x))
+        x = x + self.ffwd(self.ln2(x))
+        return x
+
 class XfmrModel(nn.Module):
     def __init__(self):
         super().__init__()
@@ -217,8 +264,8 @@ class XfmrModel(nn.Module):
         self.position_embedding_table = nn.Embedding(block_size, n_embd)
         self.size_head = nn.Linear(1, n_embd, dtype = torch.float)
         self.type_head = nn.Linear(1, n_embd, dtype = torch.float)
-        self.first_block = Block(n_embd, n_head=n_head)
-        self.blocks = nn.Sequential(*[Block(n_embd, n_head = n_head) for _ in range(n_layer - 1)])
+        self.first_blocks = nn.Sequential(*[TimedBlock(n_embd, n_head=n_head) for _ in range(n_layer)])
+        self.blocks = nn.Sequential(*[Block(n_embd, n_head = n_head) for _ in range(n_layer)])
         self.ln_f = nn.LayerNorm(n_embd)
         self.lm_head = nn.Linear(n_embd, len(class_map.items()))
         self.apply(self.__init__weights)
@@ -236,16 +283,14 @@ class XfmrModel(nn.Module):
         tok_emb = self.token_embedding_table(A)
         pos_emb = self.position_embedding_table(torch.arange(T, device = device))
         size_emb = self.size_head(B)
-        size_x = size_emb.unsqueeze(1).repeat(1, block_size, 1)
         type_emb = self.type_head(C)
-        type_x = type_emb.unsqueeze(1).repeat(1, block_size, 1)
         x = tok_emb + pos_emb
-        x = self.first_block(x)
-        x = x + type_x + size_x
+        x = self.first_blocks(x)
+        x = torch.sum(x, dim=-2, keepdim = False)
+        x = x + type_emb + size_emb
         x = self.blocks(x)
         x = self.ln_f(x)
-        x = self.lm_head(x)
-        logits = torch.sum(x, dim=-2, keepdim=False)
+        logits = self.lm_head(x)
 
         if targets is None:
             loss = None
